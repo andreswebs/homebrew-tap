@@ -7,6 +7,7 @@ class Mcbox < Formula
 
   depends_on "bash"
   depends_on "jq"
+  depends_on "coreutils"
 
   def install
     libexec.install "mcbox-core.bash"
@@ -17,6 +18,22 @@ class Mcbox < Formula
 
     (bin/"mcbox").write <<~EOF
       #!/usr/bin/env bash
+      bin_dir="/bin"
+      gnubin_dir="#{HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin"
+      IFS=':' read -r -a path_array <<< "${PATH}"
+      gnubin=false
+      for dir in "${path_array[@]}"; do
+          if [ "${dir}" == "${bin_dir}" ]; then
+              break
+          fi
+          if [ "${dir}" == "${gnubin_dir}" ]; then
+              gnubin=true
+              break
+          fi
+      done
+      if ! ${gnubin}; then
+          export PATH="${gnubin_dir}:${PATH}"
+      fi
       export MCBOX_DATA_HOME="#{libexec}"
       exec "#{libexec}/mcbox-server.bash" "${@}"
     EOF
