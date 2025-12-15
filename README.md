@@ -17,6 +17,10 @@ brew "<formula>"
 
 `brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
 
+## Acknowledgements
+
+- Dotnet casks adapted from: <https://github.com/junian/homebrew-dotnet>
+
 ## Authors
 
 **Andre Silva** - [@andreswebs](https://github.com/andreswebs)
