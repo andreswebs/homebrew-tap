@@ -4,8 +4,8 @@ class GenericBinary < Formula
   desc "Generic binary installer from GitHub releases"
   homepage "https://github.com/OWNER/REPO"
   url "https://github.com/OWNER/REPO/releases/download/VERSION/BINARY_NAME-VERSION-OS-ARCH.tar.gz"
-  sha256 "SHA256_HASH_HERE"
   license "LICENSE_TYPE"
+  sha256 "SHA256_HASH_HERE"
 
   def install
     # For a simple binary installation
