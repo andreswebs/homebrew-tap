@@ -1,8 +1,8 @@
 class Mcbox < Formula
   desc "A pluggable MCP server in Bash and jq"
   homepage "https://andreswebs.github.io/mcbox"
-  url "https://github.com/andreswebs/mcbox/releases/download/0.1.8/mcbox-0.1.8.tar.gz"
-  sha256 "41cd29cc90264c1f93b1bd284a12b6184d72932f87ac19e1fb9fef19f96d8015"
+  url "https://github.com/andreswebs/mcbox/releases/download/0.2.0/mcbox-0.2.0.tar.gz"
+  sha256 "d1328e5312339c89068d4a3709998deb69163e2e5fbf5d338ef3e9255698698d"
   license "GPL-3.0-or-later"
 
   depends_on "bash"
