@@ -1,9 +1,9 @@
 cask "dotnet-sdk@8.0" do
   arch arm: "arm64", intel: "x64"
 
-  version "8.0.417"
-  sha256 arm:   "849c32bce455875a10d0a18b22ebe0c9708a0584a7bd7e2ce0f8a646220fb140",
-         intel: "e3fe62ef220cdeed74dbc2dfcaee47ebb6e48d54aac8d39be4773d8088659051"
+  version "8.0.419"
+  sha256 arm:   "ab4345de059d1dd88c1d940d996240ff5565ba1816e085a1085013164cba59b6",
+         intel: "48d65a2bafe55f718b4d4c28bcdf27540ccafa7ffcd213fe4b91c17b3121815f"
 
   url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
   name ".NET 8 SDK (LTS)"

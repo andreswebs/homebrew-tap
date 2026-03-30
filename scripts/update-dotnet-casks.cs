@@ -1,143 +1,141 @@
 #!/usr/bin/env dotnet run
 
-#:package Newtonsoft.Json@13.0.4
-
-using System;
-using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Security.Cryptography;
 
 public class DotnetBuilds
 {
     public partial class DotnetReleases
     {
-        [JsonProperty("channel-version")]
+        [JsonPropertyName("channel-version")]
         public string? ChannelVersion { get; set; }
 
-        [JsonProperty("latest-release")]
+        [JsonPropertyName("latest-release")]
         public string? LatestRelease { get; set; }
 
-        [JsonProperty("latest-release-date")]
+        [JsonPropertyName("latest-release-date")]
         public string? LatestReleaseDate { get; set; }
 
-        [JsonProperty("latest-runtime")]
+        [JsonPropertyName("latest-runtime")]
         public string? LatestRuntime { get; set; }
 
-        [JsonProperty("latest-sdk")]
+        [JsonPropertyName("latest-sdk")]
         public string? LatestSdk { get; set; }
 
-        [JsonProperty("support-phase")]
+        [JsonPropertyName("support-phase")]
         public string? SupportPhase { get; set; }
 
-        [JsonProperty("release-type")]
+        [JsonPropertyName("release-type")]
         public string? ReleaseType { get; set; }
 
-        [JsonProperty("releases")]
+        [JsonPropertyName("releases")]
         public List<Release>? Releases { get; set; }
     }
 
     public partial class Release
     {
-        [JsonProperty("release-date")]
+        [JsonPropertyName("release-date")]
         public string? ReleaseDate { get; set; }
 
-        [JsonProperty("release-version")]
+        [JsonPropertyName("release-version")]
         public string? ReleaseVersion { get; set; }
 
-        [JsonProperty("security")]
+        [JsonPropertyName("security")]
         public bool Security { get; set; }
 
-        [JsonProperty("release-notes")]
+        [JsonPropertyName("release-notes")]
         public Uri? ReleaseNotes { get; set; }
 
-        [JsonProperty("runtime")]
+        [JsonPropertyName("runtime")]
         public Runtime? Runtime { get; set; }
 
-        [JsonProperty("sdk")]
+        [JsonPropertyName("sdk")]
         public Sdk? Sdk { get; set; }
     }
 
     public partial class Runtime
     {
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string? Version { get; set; }
 
-        [JsonProperty("version-display")]
+        [JsonPropertyName("version-display")]
         public string? VersionDisplay { get; set; }
 
-        [JsonProperty("vs-version")]
+        [JsonPropertyName("vs-version")]
         public string? VsVersion { get; set; }
 
-        [JsonProperty("vs-mac-version")]
+        [JsonPropertyName("vs-mac-version")]
         public string? VsMacVersion { get; set; }
 
-        [JsonProperty("files")]
+        [JsonPropertyName("files")]
         public List<File>? Files { get; set; }
     }
 
     public partial class File
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string? Name { get; set; }
 
-        [JsonProperty("rid")]
+        [JsonPropertyName("rid")]
         public string? Rid { get; set; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public Uri? Url { get; set; }
 
-        [JsonProperty("hash")]
+        [JsonPropertyName("hash")]
         public string? Hash { get; set; }
     }
 
     public partial class Sdk
     {
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string? Version { get; set; }
 
-        [JsonProperty("version-display")]
+        [JsonPropertyName("version-display")]
         public string? VersionDisplay { get; set; }
 
-        [JsonProperty("runtime-version")]
+        [JsonPropertyName("runtime-version")]
         public string? RuntimeVersion { get; set; }
 
-        [JsonProperty("vs-version")]
+        [JsonPropertyName("vs-version")]
         public string? VsVersion { get; set; }
 
-        [JsonProperty("vs-mac-version")]
+        [JsonPropertyName("vs-mac-version")]
         public string? VsMacVersion { get; set; }
 
-        [JsonProperty("vs-support")]
+        [JsonPropertyName("vs-support")]
         public string? VsSupport { get; set; }
 
-        [JsonProperty("vs-mac-support")]
+        [JsonPropertyName("vs-mac-support")]
         public string? VsMacSupport { get; set; }
 
-        [JsonProperty("csharp-version")]
+        [JsonPropertyName("csharp-version")]
         public string? CsharpVersion { get; set; }
 
-        [JsonProperty("fsharp-version")]
+        [JsonPropertyName("fsharp-version")]
         public string? FsharpVersion { get; set; }
 
-        [JsonProperty("vb-version")]
+        [JsonPropertyName("vb-version")]
         public string? VbVersion { get; set; }
 
-        [JsonProperty("files")]
+        [JsonPropertyName("files")]
         public List<File>? Files { get; set; }
     }
 }
 
-public class RubyCaskUpdater
+[JsonSerializable(typeof(DotnetBuilds.DotnetReleases))]
+internal partial class DotnetBuildsJsonContext : JsonSerializerContext { }
+
+public partial class RubyCaskUpdater
 {
     public class CaskData
     {
-        public string Version { get; set; }
-        public string Sha256Arm { get; set; }
-        public string Sha256Intel { get; set; }
+        public required string Version { get; set; }
+        public required string Sha256Arm { get; set; }
+        public required string Sha256Intel { get; set; }
     }
 
     public static CaskData ReadCaskFile(string filePath)
@@ -151,23 +149,19 @@ public class RubyCaskUpdater
 
     public static CaskData ParseCaskContent(string content)
     {
-        var caskData = new CaskData();
+        var versionMatch = VersionPattern().Match(content);
+        var version = versionMatch.Success ? versionMatch.Groups[2].Value : "";
 
-        // Parse version
-        var versionMatch = Regex.Match(content, @"version\s+""([^""]+)""");
-        if (versionMatch.Success)
-            caskData.Version = versionMatch.Groups[1].Value;
+        var sha256Match = Sha256Pattern().Match(content);
+        var sha256Arm = sha256Match.Success ? sha256Match.Groups[2].Value : "";
+        var sha256Intel = sha256Match.Success ? sha256Match.Groups[4].Value : "";
 
-        // Parse SHA256 values
-        var sha256Pattern = @"sha256\s+arm:\s+""([^""]+)"",\s*intel:\s+""([^""]+)""";
-        var sha256Match = Regex.Match(content, sha256Pattern);
-        if (sha256Match.Success)
+        return new CaskData
         {
-            caskData.Sha256Arm = sha256Match.Groups[1].Value;
-            caskData.Sha256Intel = sha256Match.Groups[2].Value;
-        }
-
-        return caskData;
+            Version = version,
+            Sha256Arm = sha256Arm,
+            Sha256Intel = sha256Intel,
+        };
     }
 
     public static void UpdateCaskFile(string filePath, CaskData newData)
@@ -182,20 +176,14 @@ public class RubyCaskUpdater
 
     public static string UpdateCaskContent(string content, CaskData newData)
     {
-        // Update version - FIXED: Use ${1} instead of $1 to avoid ambiguity with numbers
         if (!string.IsNullOrEmpty(newData.Version))
         {
-            content = Regex.Replace(content,
-                @"(version\s+"")[^""]+("")",
-                "${1}" + newData.Version + "${2}");
+            content = VersionPattern().Replace(content, "${1}" + newData.Version + "${3}");
         }
 
-        // Update SHA256 values - FIXED: Use ${n} syntax
         if (!string.IsNullOrEmpty(newData.Sha256Arm) && !string.IsNullOrEmpty(newData.Sha256Intel))
         {
-            content = Regex.Replace(content,
-                @"(sha256\s+arm:\s+"")[^""]+("",\s*intel:\s+"")[^""]+("")",
-                "${1}" + newData.Sha256Arm + "${2}" + newData.Sha256Intel + "${3}");
+            content = Sha256Pattern().Replace(content, "${1}" + newData.Sha256Arm + "${3}" + newData.Sha256Intel + "${5}");
         }
 
         return content;
@@ -209,11 +197,8 @@ public class RubyCaskUpdater
         {
             var response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
-
             var json = await response.Content.ReadAsStringAsync();
-            // Console.WriteLine(json);
-            var result = JsonConvert.DeserializeObject<DotnetBuilds.DotnetReleases>(json);
-
+            var result = JsonSerializer.Deserialize(json, DotnetBuildsJsonContext.Default.DotnetReleases);
             return result;
         }
         catch (HttpRequestException ex)
@@ -241,22 +226,24 @@ public class RubyCaskUpdater
 
         using var stream = await response.Content.ReadAsStreamAsync();
         byte[] hashBytes = await sha256.ComputeHashAsync(stream);
-        return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+        return Convert.ToHexStringLower(hashBytes);
     }
 
     const string DotnetArm64Filename = "dotnet-sdk-osx-arm64.pkg";
     const string DotnetX64Filename = "dotnet-sdk-osx-x64.pkg";
 
-    // Example usage
+    // Resolve repo root from the script file's compile-time path (scripts/ -> repo root)
+    static string GetRepoRoot([CallerFilePath] string scriptPath = "")
+        => Path.GetDirectoryName(Path.GetDirectoryName(scriptPath))!;
+
     public static async Task Main(string[] args)
     {
+        var repoRoot = GetRepoRoot();
         var supportedVersions = new List<string>
         {
             "10.0",
             "9.0",
             "8.0",
-            // "7.0", // Out of support May 14, 2024
-            // "6.0", // Out of support November 12, 2024
         };
 
         foreach (var version in supportedVersions)
@@ -264,7 +251,7 @@ public class RubyCaskUpdater
             try
             {
                 Console.WriteLine($"Checking .NET {version}");
-                var filePath = $"./Casks/dotnet-sdk@{version}.rb"; // Path to your Ruby cask file
+                var filePath = Path.Combine(repoRoot, "Casks", $"dotnet-sdk@{version}.rb");
 
                 // Read current values
                 var currentData = ReadCaskFile(filePath);
@@ -331,4 +318,9 @@ public class RubyCaskUpdater
             }
         }
     }
+
+  [GeneratedRegex(@"(version\s+"")([^""]+)("")")]
+  private static partial Regex VersionPattern();
+  [GeneratedRegex(@"(sha256\s+arm:\s+"")([^""]+)("",\s*intel:\s+"")([^""]+)("")")]
+  private static partial Regex Sha256Pattern();
 }
