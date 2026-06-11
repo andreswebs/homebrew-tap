@@ -1,0 +1,30 @@
+---
+name: DNClient Desktop Cask Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Run update check
+        run: ./scripts/update-dnclient-desktop.sh
+
+      - name: Commit changes if any
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add -A
+            git commit -m "dnclient-desktop version update"
+            git push
+          else
+            echo "no changes to commit" >&2
+          fi
