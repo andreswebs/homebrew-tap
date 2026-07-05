@@ -1,11 +1,15 @@
 cask "dotnet-sdk@8.0" do
-  arch arm: "arm64", intel: "x64"
-
   version "8.0.420"
-  sha256 arm:   "2c77eb257bec3116ad958ae93261de3531d92ff5ef1745a42a0e8cc324a353e6",
-         intel: "ae1267b3c0a5195fb2746069afa425196e1e7792cf3aa6c28a55ef06b1eb672b"
 
-  url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
+  on_macos do
+    arch arm: "arm64", intel: "x64"
+
+    sha256 arm:   "2c77eb257bec3116ad958ae93261de3531d92ff5ef1745a42a0e8cc324a353e6",
+           intel: "ae1267b3c0a5195fb2746069afa425196e1e7792cf3aa6c28a55ef06b1eb672b"
+
+    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
+  end
+
   name ".NET 8 SDK (LTS)"
   desc "Developer platform"
   homepage "https://www.microsoft.com/net/core#macos"
@@ -28,20 +32,22 @@ cask "dotnet-sdk@8.0" do
 
   depends_on macos: :ventura
 
-  pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
+  on_macos do
+    pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
 
-  uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
+    uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
 
-  zap pkgutil: [
-        "com.microsoft.dotnet.*",
-        "com.microsoft.netstandard.pack.targeting.*",
-      ],
-      delete:  [
-        "/etc/paths.d/dotnet",
-        "/etc/paths.d/dotnet-cli-tools",
-      ],
-      trash:   [
-        "~/.dotnet",
-        "~/.nuget",
-      ]
+    zap pkgutil: [
+          "com.microsoft.dotnet.*",
+          "com.microsoft.netstandard.pack.targeting.*",
+        ],
+        delete:  [
+          "/etc/paths.d/dotnet",
+          "/etc/paths.d/dotnet-cli-tools",
+        ],
+        trash:   [
+          "~/.dotnet",
+          "~/.nuget",
+        ]
+  end
 end
