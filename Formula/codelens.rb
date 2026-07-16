@@ -1,24 +1,24 @@
 class Codelens < Formula
   desc "Agent-first Go reimplementation of code-maat for evolutionary code analysis"
   homepage "https://github.com/andreswebs/codelens"
-  version "0.0.2"
+  version "0.0.3"
   license "GPL-3.0-or-later"
 
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/andreswebs/codelens/releases/download/v#{version}/codelens-darwin-arm64-v#{version}.tar.gz"
-      sha256 "802471cd5465824f18912924b9ca1e04da412f23ea6c92b9958e2b0f38b5e211"
+      sha256 "dfeba91ca16372b56f8c6b37edb760469fd1aa6381335bc009b361ff9fc0e74c"
     else
       url "https://github.com/andreswebs/codelens/releases/download/v#{version}/codelens-darwin-amd64-v#{version}.tar.gz"
-      sha256 "a482eaaadb462807b1436d07d2628f019fb034f1c2fc31274959a0f0d79bb447"
+      sha256 "a7939e6aed4d88f4222dbda113a6d137066d3f89351a4cc7448dabf7bd2d7745"
     end
   elsif OS.linux?
     if Hardware::CPU.arm?
       url "https://github.com/andreswebs/codelens/releases/download/v#{version}/codelens-linux-arm64-v#{version}.tar.gz"
-      sha256 "64d0e031bf9f0e99798f192bc5003eb126e46c206c920369a58ecf6873914c65"
+      sha256 "d25190c96088dfd33bef739b321519c8e3fb5f1f54229dfa1a9fbe387d44a003"
     else
       url "https://github.com/andreswebs/codelens/releases/download/v#{version}/codelens-linux-amd64-v#{version}.tar.gz"
-      sha256 "587faaca205e49c25c4426994c4e6373f2005a2c5010f27ff82066d697df9fa2"
+      sha256 "5b5c4d58aca4b8f145196a8f97188f1f6e3f862c6b93defd950b1051931ae23b"
     end
   end
 
