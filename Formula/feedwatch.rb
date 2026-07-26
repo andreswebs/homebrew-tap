@@ -1,24 +1,24 @@
 class Feedwatch < Formula
   desc "Agent-first command-line tool for watching RSS and Atom feeds"
   homepage "https://github.com/andreswebs/feedwatch"
-  version "0.0.2"
+  version "0.0.3"
   license "GPL-3.0-or-later"
 
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/andreswebs/feedwatch/releases/download/v#{version}/feedwatch-darwin-arm64-v#{version}.tar.gz"
-      sha256 "ffe595cf0aebd06287407b0462548c4caa2dd37c1ede264ef248156cdb89796f"
+      sha256 "498bfab2f554612c96ac8769b4d0e447f2e65e42df9b36775103521853401ca0"
     else
       url "https://github.com/andreswebs/feedwatch/releases/download/v#{version}/feedwatch-darwin-amd64-v#{version}.tar.gz"
-      sha256 "17add38d49a0536dd1254e449998534c6f568f47296e0eb79ca88976352bbbba"
+      sha256 "e6b14ebce331ec4a1f7d8b00ebe4f9b53405ca2df7dcc94e154f98d7f13bf82f"
     end
   elsif OS.linux?
     if Hardware::CPU.arm?
       url "https://github.com/andreswebs/feedwatch/releases/download/v#{version}/feedwatch-linux-arm64-v#{version}.tar.gz"
-      sha256 "506bb2a66672d1aa6c9368698cba3f15265afa24667b1d09f14a4b70e0795551"
+      sha256 "762dc0d2c7f6ecc2ddb0fc4b1835555e6759d9ee4faa6bb02576de15436c7a9a"
     else
       url "https://github.com/andreswebs/feedwatch/releases/download/v#{version}/feedwatch-linux-amd64-v#{version}.tar.gz"
-      sha256 "02ac7789ea36d9b9d5dd78e4f8a385095f7ab0447100e31fbbe00b49b8d44276"
+      sha256 "ed2da4c07f0b76aa59a9353985ad9bee1eff970b232c70b65b20e23e20d14519"
     end
   end
 
