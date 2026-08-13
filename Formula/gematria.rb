@@ -1,24 +1,24 @@
 class Gematria < Formula
   desc "Command-line tool for Hebrew gematria computation"
   homepage "https://github.com/andreswebs/gematria"
-  version "0.0.1"
+  version "0.0.2"
   license "GPL-3.0-or-later"
 
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/andreswebs/gematria/releases/download/v#{version}/gematria-darwin-arm64-v#{version}.tar.gz"
-      sha256 "500b995df8a55cd9457643f45680818ef4d5d69d425bdb7498bfb6d265bec0f7"
+      sha256 "391661eccb1000dc17082cafb0a73aebb5b6e83ddb84554fdfb6a58421600eb6"
     else
       url "https://github.com/andreswebs/gematria/releases/download/v#{version}/gematria-darwin-amd64-v#{version}.tar.gz"
-      sha256 "8de5a08884e7dfac503c6bd5ad27cf1390db64935440954cc07f257647c7aed4"
+      sha256 "b27dc4ba006d3e2e97dd3e7e82d0577771c6e6654bb34b5ea1081aac36d5bce2"
     end
   elsif OS.linux?
     if Hardware::CPU.arm?
       url "https://github.com/andreswebs/gematria/releases/download/v#{version}/gematria-linux-arm64-v#{version}.tar.gz"
-      sha256 "76c27c906e1f44217b5c8e2aa10aa3af6d1a0617b499087e838001c0a10b2553"
+      sha256 "7a10c007001fc07dd6225b260d2c55a4a1bc13250c87325a93ffd6808daca09a"
     else
       url "https://github.com/andreswebs/gematria/releases/download/v#{version}/gematria-linux-amd64-v#{version}.tar.gz"
-      sha256 "f64869294790c29f80c9b8497f212a16921a35c2954e92de662c42ad66fac828"
+      sha256 "829cb437b961d843771aee16bb103dc44b954b9000fd67bc17cb965152a4cd81"
     end
   end
 
