@@ -241,6 +241,7 @@ public partial class RubyCaskUpdater
         var repoRoot = GetRepoRoot();
         var supportedVersions = new List<string>
         {
+            "11.0",
             "10.0",
             "9.0",
             "8.0",

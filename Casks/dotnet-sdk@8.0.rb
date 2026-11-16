@@ -1,16 +1,12 @@
 cask "dotnet-sdk@8.0" do
-  version "8.0.420"
+  arch arm: "arm64", intel: "x64"
 
-  on_macos do
-    arch arm: "arm64", intel: "x64"
+  version "8.0.428"
+  sha256 arm:   "a6a302b95ef39c6ea753df6514195b604d7d8ecd5b99f955295dd8a35f05dbbd",
+         intel: "21fee50f4cac4f5ec08fcdded3289d814790c143214e92fca3659da093d7b80a"
 
-    sha256 arm:   "2c77eb257bec3116ad958ae93261de3531d92ff5ef1745a42a0e8cc324a353e6",
-           intel: "ae1267b3c0a5195fb2746069afa425196e1e7792cf3aa6c28a55ef06b1eb672b"
-
-    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
-  end
-
-  name ".NET 8 SDK (LTS)"
+  url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
+  name ".NET 8 SDK"
   desc "Developer platform"
   homepage "https://www.microsoft.com/net/core#macos"
 
@@ -30,24 +26,24 @@ cask "dotnet-sdk@8.0" do
     end
   end
 
+  deprecate! date: "2026-11-10", because: "is no longer supported upstream"
+
   depends_on macos: :ventura
 
-  on_macos do
-    pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
+  pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
 
-    uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
+  uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
 
-    zap pkgutil: [
-          "com.microsoft.dotnet.*",
-          "com.microsoft.netstandard.pack.targeting.*",
-        ],
-        delete:  [
-          "/etc/paths.d/dotnet",
-          "/etc/paths.d/dotnet-cli-tools",
-        ],
-        trash:   [
-          "~/.dotnet",
-          "~/.nuget",
-        ]
-  end
+  zap pkgutil: [
+        "com.microsoft.dotnet.*",
+        "com.microsoft.netstandard.pack.targeting.*",
+      ],
+      delete:  [
+        "/etc/paths.d/dotnet",
+        "/etc/paths.d/dotnet-cli-tools",
+      ],
+      trash:   [
+        "~/.dotnet",
+        "~/.nuget",
+      ]
 end

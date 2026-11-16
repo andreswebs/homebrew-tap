@@ -1,0 +1,54 @@
+---
+name: Tap Syntax
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - Casks/**
+      - Formula/**
+      - .github/workflows/tap-syntax.yml
+  pull_request:
+    paths:
+      - Casks/**
+      - Formula/**
+      - .github/workflows/tap-syntax.yml
+
+jobs:
+  tap-syntax:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    env:
+      TAP: andreswebs/tap
+
+    steps:
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trust the tap
+        run: brew trust "${TAP}"
+
+      - name: Load every formula and cask
+        run: brew readall --os=all --arch=all "${TAP}"
+
+      # Scoped to the package directories: a tap-wide style run also applies
+      # Homebrew's own Ruby and shell style to misc/ and scripts/.
+      - name: Check style
+        run: |
+          tap_dir="$(brew --repository "${TAP}")"
+          brew style "${tap_dir}/Casks" "${tap_dir}/Formula"
+
+      # macOS only: most of the casks are macOS-only, and that is where the
+      # audit has been run by hand.
+      - name: Audit
+        if: runner.os == 'macOS'
+        run: brew audit --tap="${TAP}" --skip-style --except=installed

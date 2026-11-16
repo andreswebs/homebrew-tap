@@ -1,21 +1,38 @@
 # andreswebs/tap
 
-## How do I install these formulae?
+## How do I install these formulae and casks?
 
-`brew install andreswebs/tap/<formula>`
+Install by fully qualified name. This trusts only the item being installed:
 
-Or `brew tap andreswebs/tap` and then `brew install <formula>`.
+```sh
+brew install andreswebs/tap/<formula>
+brew install --cask andreswebs/tap/<cask>
+```
 
-Or, in a `brew bundle` `Brewfile`:
+To install by short name, tap the repository and trust the item first.
+Homebrew requires explicit trust for non-official taps:
+
+```sh
+brew tap andreswebs/tap
+brew trust --formula andreswebs/tap/<formula>
+brew install <formula>
+```
+
+Use `brew trust --cask andreswebs/tap/<cask>` for a cask, or
+`brew trust andreswebs/tap` to trust everything in this tap.
+
+In a `brew bundle` `Brewfile`:
 
 ```ruby
 tap "andreswebs/tap"
-brew "<formula>"
+brew "andreswebs/tap/<formula>", trusted: true
+cask "andreswebs/tap/<cask>", trusted: true
 ```
 
 ## Documentation
 
 `brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
+See [Tap Trust](https://docs.brew.sh/Tap-Trust) for how trust works.
 
 ## Acknowledgements
 

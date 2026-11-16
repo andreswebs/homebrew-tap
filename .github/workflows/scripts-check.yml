@@ -1,0 +1,33 @@
+---
+name: Scripts Check
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/**
+      - .github/workflows/scripts-check.yml
+  pull_request:
+    paths:
+      - scripts/**
+      - .github/workflows/scripts-check.yml
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install bats and shfmt
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes bats shfmt
+
+      - name: Run checks
+        run: ./scripts/test/check.bash

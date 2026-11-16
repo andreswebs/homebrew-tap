@@ -9,13 +9,15 @@ on:
 jobs:
   check-updates:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
       - name: Run update check
-        run: ./scripts/update-dnclient-desktop.sh
+        run: ./scripts/update-dnclient-desktop.bash --apply
 
       - name: Commit changes if any
         run: |

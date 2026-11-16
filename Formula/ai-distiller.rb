@@ -3,21 +3,24 @@ class AiDistiller < Formula
   homepage "https://github.com/janreges/ai-distiller"
   license "MIT"
 
-  if OS.mac?
-    if Hardware::CPU.arm?
-      url "https://github.com/janreges/ai-distiller/releases/download/v1.3.1/aid-darwin-arm64-v1.3.1.tar.gz"
-      sha256 "8b9701e95c453a87a029f3675df84e15331bc288145b9b90813837f967841273"
-    else
-      url "https://github.com/janreges/ai-distiller/releases/download/v1.3.1/aid-darwin-amd64-v1.3.1.tar.gz"
-      sha256 "caeef230ffa1237a80b84e705c744a7a15dcc4849fdc29d939aaaaceb7d0f179"
+  on_macos do
+    on_arm do
+      url "https://github.com/janreges/ai-distiller/releases/download/v1.5.0/aid-darwin-arm64-v1.5.0.tar.gz"
+      sha256 "b58ad4194ae3f47468df86ac413fadebdd7735307d381a84dbbf7164051dbc8a"
     end
-  elsif OS.linux?
-    if Hardware::CPU.arm?
-      url "https://github.com/janreges/ai-distiller/releases/download/v1.3.1/aid-linux-arm64-v1.3.1.tar.gz"
-      sha256 "03d3f1ccd1bc0b7b2fd1868874615dbd296078cd534b90ad2146b6944cd87663"
-    else
-      url "https://github.com/janreges/ai-distiller/releases/download/v1.3.1/aid-linux-amd64-v1.3.1.tar.gz"
-      sha256 "7f0a2e2e30231fc06b7a544546478f748cc1b16a21073ea63866d88942be0dba"
+    on_intel do
+      url "https://github.com/janreges/ai-distiller/releases/download/v1.5.0/aid-darwin-amd64-v1.5.0.tar.gz"
+      sha256 "a902be9541dc422cd6f717e4a8ac2f4377114a3d3f4b0514446afc73b3e8d42e"
+    end
+  end
+  on_linux do
+    on_arm do
+      url "https://github.com/janreges/ai-distiller/releases/download/v1.5.0/aid-linux-arm64-v1.5.0.tar.gz"
+      sha256 "0a7c4fe536778b322aeadff04d4719d8baf6fa24aad56a058e1814d3ecc36c41"
+    end
+    on_intel do
+      url "https://github.com/janreges/ai-distiller/releases/download/v1.5.0/aid-linux-amd64-v1.5.0.tar.gz"
+      sha256 "e72b8c89545513389b8c97ab34c77fdfb006cbd701e7e4ba5bc397ed1bcb0908"
     end
   end
 

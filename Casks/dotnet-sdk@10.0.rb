@@ -1,15 +1,11 @@
 cask "dotnet-sdk@10.0" do
-  version "10.0.202"
+  arch arm: "arm64", intel: "x64"
 
-  on_macos do
-    arch arm: "arm64", intel: "x64"
+  version "10.0.404"
+  sha256 arm:   "2e0637ae0448bd8e3615cf31e0ad2a6dcb3fa0d3a78873f98fb1d25b39e858d6",
+         intel: "7265f4960b6ff57c8f9df6061eac3fab0518d27b87562d946d50005efe0407bb"
 
-    sha256 arm:   "6163c6dd31e69a5a766b54a52ddac887ba96e2fd887f26d79265d998eef97e6c",
-           intel: "9b919eb97e7051ed56c6fe6d92f435c8dc7f75a51c61cc4028c29a8b31df738c"
-
-    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
-  end
-
+  url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
   name ".NET 10 SDK (LTS)"
   desc "Developer platform"
   homepage "https://www.microsoft.com/net/core#macos"
@@ -32,22 +28,20 @@ cask "dotnet-sdk@10.0" do
 
   depends_on macos: :ventura
 
-  on_macos do
-    pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
+  pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
 
-    uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
+  uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
 
-    zap pkgutil: [
-          "com.microsoft.dotnet.*",
-          "com.microsoft.netstandard.pack.targeting.*",
-        ],
-        delete:  [
-          "/etc/paths.d/dotnet",
-          "/etc/paths.d/dotnet-cli-tools",
-        ],
-        trash:   [
-          "~/.dotnet",
-          "~/.nuget",
-        ]
-  end
+  zap pkgutil: [
+        "com.microsoft.dotnet.*",
+        "com.microsoft.netstandard.pack.targeting.*",
+      ],
+      delete:  [
+        "/etc/paths.d/dotnet",
+        "/etc/paths.d/dotnet-cli-tools",
+      ],
+      trash:   [
+        "~/.dotnet",
+        "~/.nuget",
+      ]
 end

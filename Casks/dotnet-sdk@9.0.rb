@@ -1,15 +1,11 @@
 cask "dotnet-sdk@9.0" do
-  version "9.0.313"
+  arch arm: "arm64", intel: "x64"
 
-  on_macos do
-    arch arm: "arm64", intel: "x64"
+  version "9.0.321"
+  sha256 arm:   "3deea6ed3ea001fbd279783297cbdbf6c43c3ded3f5da61c7e44c8951fd4e2b0",
+         intel: "e300b36b6d57ada1a4cc3334a3298d130a8ee253894a834f839aa11658a4fec9"
 
-    sha256 arm:   "9775cd2defea8b422b72f22b1d051fcc68580ae824d1ed50624f0277952f03e6",
-           intel: "29d8e9574273356c0ae2b7370988cf88db80472d78bb8ba41b2ab83ae89bab5a"
-
-    url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
-  end
-
+  url "https://builds.dotnet.microsoft.com/dotnet/Sdk/#{version}/dotnet-sdk-#{version}-osx-#{arch}.pkg"
   name ".NET 9 SDK"
   desc "Developer platform"
   homepage "https://www.microsoft.com/net/core#macos"
@@ -30,24 +26,24 @@ cask "dotnet-sdk@9.0" do
     end
   end
 
+  deprecate! date: "2026-11-10", because: "is no longer supported upstream"
+
   depends_on macos: :ventura
 
-  on_macos do
-    pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
+  pkg "dotnet-sdk-#{version}-osx-#{arch}.pkg"
 
-    uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
+  uninstall pkgutil: "com.microsoft.dotnet.*#{version.major_minor}*#{arch}"
 
-    zap pkgutil: [
-          "com.microsoft.dotnet.*",
-          "com.microsoft.netstandard.pack.targeting.*",
-        ],
-        delete:  [
-          "/etc/paths.d/dotnet",
-          "/etc/paths.d/dotnet-cli-tools",
-        ],
-        trash:   [
-          "~/.dotnet",
-          "~/.nuget",
-        ]
-  end
+  zap pkgutil: [
+        "com.microsoft.dotnet.*",
+        "com.microsoft.netstandard.pack.targeting.*",
+      ],
+      delete:  [
+        "/etc/paths.d/dotnet",
+        "/etc/paths.d/dotnet-cli-tools",
+      ],
+      trash:   [
+        "~/.dotnet",
+        "~/.nuget",
+      ]
 end

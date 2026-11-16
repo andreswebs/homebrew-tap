@@ -1,13 +1,13 @@
 class Mcbox < Formula
-  desc "A pluggable MCP server in Bash and jq"
+  desc "Pluggable MCP server in Bash and jq"
   homepage "https://andreswebs.github.io/mcbox"
   url "https://github.com/andreswebs/mcbox/releases/download/0.2.0/mcbox-0.2.0.tar.gz"
   sha256 "d1328e5312339c89068d4a3709998deb69163e2e5fbf5d338ef3e9255698698d"
   license "GPL-3.0-or-later"
 
   depends_on "bash"
-  depends_on "jq"
   depends_on "coreutils"
+  depends_on "jq"
 
   def install
     libexec.install "mcbox-core.bash"

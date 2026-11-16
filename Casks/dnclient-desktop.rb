@@ -1,6 +1,6 @@
 cask "dnclient-desktop" do
-  version "0.9.7,56c0d31f"
-  sha256 "4cd697456f80e1bec1cb659d0fa8a35f4f1029e1b4bf8be2d8b7553e32d68506"
+  version "1.0.0,837870e1"
+  sha256 "ce1242b9ac167bca4c0e6dc76c8c008d0e10d389fbaec7ae444a558aacc9d370"
 
   url "https://dl.defined.net/#{version.csv.second}/v#{version.csv.first}/macos/DNClient-Desktop.dmg"
   name "DNClient Desktop"
@@ -26,9 +26,14 @@ cask "dnclient-desktop" do
             quit:      "net.defined.dnclient-desktop"
 
   zap trash: [
+    "/Library/Application Support/DefinedNet",
     "~/Library/Application Support/DNClient Desktop",
+    "~/Library/Caches/dnclient-desktop",
     "~/Library/Caches/net.defined.dnclient-desktop",
     "~/Library/HTTPStorages/net.defined.dnclient-desktop",
+    "~/Library/Preferences/dnclient-desktop.plist",
     "~/Library/Preferences/net.defined.dnclient-desktop.plist",
+    "~/Library/WebKit/dnclient-desktop",
+    "~/Library/WebKit/net.defined.dnclient-desktop",
   ]
 end
