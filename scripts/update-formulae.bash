@@ -11,7 +11,7 @@ WORK_DIR=""
 
 function check_dependencies() {
     check_commands "awk" "cmp" "curl" "date" "grep" "jq" "mktemp" "realpath" "rm" "shasum" || return 1
-    check_gnu_flags "mktemp --directory" "realpath --canonicalize-existing" "rm --recursive" || return 1
+    check_gnu_flags "mktemp --directory" "realpath --quiet" "rm --recursive" || return 1
 }
 
 function usage() {
@@ -52,9 +52,16 @@ function get_formula_dir() {
         return 1
     fi
 
-    local formula_dir="${UPDATE_FORMULAE_FORMULA_DIR:-${script_dir}/../Formula}"
-    if ! formula_dir=$(realpath --canonicalize-existing --quiet "${formula_dir}"); then
-        log_error "formula directory not found: ${UPDATE_FORMULAE_FORMULA_DIR:-${script_dir}/../Formula}"
+    local -r wanted="${UPDATE_FORMULAE_FORMULA_DIR:-${script_dir}/../Formula}"
+    # tested here, not left to realpath: implementations disagree on whether
+    # a path that does not exist is an error
+    if ! [ -e "${wanted}" ]; then
+        log_error "formula directory not found: ${wanted}"
+        return 1
+    fi
+    local formula_dir
+    if ! formula_dir=$(realpath --quiet "${wanted}"); then
+        log_error "could not resolve: ${wanted}"
         return 1
     fi
     if ! [ -d "${formula_dir}" ]; then

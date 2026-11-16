@@ -32,7 +32,7 @@ function usage() {
 
 function check_dependencies() {
     check_commands "awk" "curl" "date" "grep" "jq" "realpath" "shasum" || return 1
-    check_gnu_flags "realpath --canonicalize-existing" || return 1
+    check_gnu_flags "realpath --quiet" || return 1
 }
 
 function get_cask_file() {
@@ -43,9 +43,15 @@ function get_cask_file() {
     fi
 
     local -r wanted="${UPDATE_DNCLIENT_CASK_FILE:-${script_dir}/../Casks/dnclient-desktop.rb}"
-    local cask_file
-    if ! cask_file=$(realpath --canonicalize-existing --quiet "${wanted}"); then
+    # tested here, not left to realpath: implementations disagree on whether
+    # a path that does not exist is an error
+    if ! [ -e "${wanted}" ]; then
         log_error "cask file not found: ${wanted}"
+        return 1
+    fi
+    local cask_file
+    if ! cask_file=$(realpath --quiet "${wanted}"); then
+        log_error "could not resolve: ${wanted}"
         return 1
     fi
     if ! [ -f "${cask_file}" ] || ! [ -r "${cask_file}" ]; then
